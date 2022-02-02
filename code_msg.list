@@ -1,0 +1,50 @@
+// Program Code
+(0) OK
+(-11) Config File Not Found
+(-12) Config File Read Fail
+(-13) Config File Parse Fail
+(-14) Config Param `` Not Found
+(-15) Config Param `` Invalid
+(-16) [Server] DataBase Connect Fail
+(-17) [Server] DataBase Connection Close Fail
+(-18) SQL Query Fail
+(-19) SQL Exec Fail
+(-20) Redis Connect Fail
+(-21) Redis Connection Close Fail
+(-22) Redis Set Fail
+(-23) Redis Get Fail
+(-24) Redis Expire Fail
+(-25) Redis Del Fail
+(-26) Redis Key Not Found
+(-27) HTTP Server Start Fail
+(-50) UserInfo Error
+(-51) User Not Found
+(-99) Others Error
+
+// HTTP User Code
+(000) (OK)
+(010) Param `` Not Found
+(011) Param `` Invalid
+(012) Session Invalid
+(013) Password Invalid
+(014) User Not Found
+(015) User Expired
+(016) User Disable
+(017) Auth Timeout
+(018) Token Invalid
+(019) User Access Denied
+(098) API Call Fail
+(099) Others Error
+// HTTP Admin Code
+(100) (OK)
+(110) Param `` Not Found
+(111) Param `` Invalid
+(112) User Not Found
+(113) Admin Password Invalid
+(114) Admin Token Auth Fail
+(115) Admin Token Not Found
+(198) API Call Fail
+(199) Others Error
+
+
+(999) Server Close

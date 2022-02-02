@@ -1,0 +1,12 @@
+{
+  "db_conn": "tcp://10.254.0.6:3306",
+  "db_name": "auth_user_data",
+  "db_user": "program_account",
+  "db_pass": "9NRrbKr0iU93uQcW",
+  "redis_conn": "tcp://127.0.0.1:6379",
+  "redis_pass": "",
+  "admin_password": "adminadmin",
+  "listen": "0.0.0.0",
+  "port": 8082,
+  "admin_cidr_access_status": true
+}
