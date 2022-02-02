@@ -24,10 +24,12 @@ var (
 	Admin_CIDR_Access_Status_Set bool   = true
 	Admin_Access_CIDR_Set        []string
 	Admin_Password               string = "adminadmin"
+	DBLog                        bool   = false
 )
 
 var (
 	DB_TableName                  string = "user_data"
+	DB_LogTableName               string = "log"
 	Cache_Prefix_Tag              string = "auth_"
 	Cache_Session_Tag             string = Cache_Prefix_Tag + "session_"
 	Cache_Session_Expire_Time     uint64 = 30
@@ -100,4 +102,10 @@ var DB_Struct []string = []string{
 	"app",
 	"expire_time",
 	"show_username",
+}
+
+var DB_Log_Struct []string = []string{
+	"time",
+	"operate",
+	"message",
 }

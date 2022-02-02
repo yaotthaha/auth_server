@@ -2,6 +2,7 @@ package main
 
 import (
 	"auth_server/lib"
+	"database/sql"
 	"log"
 	"os"
 )
@@ -41,5 +42,30 @@ func OutputLog(LogLevel int, LogData string) {
 		os.Exit(-1)
 	} else {
 		log.Println(LogData)
+	}
+}
+
+func DataBaseLog(DB *sql.DB, InputMsg ...string) {
+	SQL1 := "INSERT INTO `" + DB_LogTableName + "`("
+	SQL2 := ") VALUES ("
+	SQL3 := ")"
+	i := 0
+	for _, v := range DB_Log_Struct {
+		switch v {
+		case "time":
+			SQL1 += "`" + v + "`, "
+			SQL2 += "'" + "[" + lib.GenDate_String() + "]" + "', "
+		default:
+			SQL1 += "`" + v + "`"
+			SQL2 += "'" + InputMsg[i] + "', "
+			i++
+		}
+	}
+	SQL1 = SQL1[0 : len(SQL1)-2]
+	SQL2 = SQL2[0 : len(SQL2)-2]
+	SQL := SQL1 + SQL2 + SQL3
+	code, err := lib.DataBaseExec(DB, SQL)
+	if code != 0 {
+		OutputLog(-2, "DataBase Log Fail: "+err.Error())
 	}
 }

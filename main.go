@@ -51,6 +51,22 @@ func Pre() {
 		OutputLog(-1, "Connect DataBase Fail: ["+strconv.Itoa(code)+"] "+err.Error())
 	}
 	OutputLog(0, "Connect DataBase Success")
+	if DBLog {
+		SQLCreateLog := "CREATE TABLE IF NOT EXISTS `" + DB_LogTableName + "` (" +
+			func() string {
+				SQLBasic := ""
+				for _, v := range DB_Log_Struct {
+					SQLBasic += "`" + v + "` VARCHAR(255) NOT NULL, "
+				}
+				SQLBasic = SQLBasic[0 : len(SQLBasic)-2]
+				return SQLBasic
+			}() +
+			") ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+		code_, _ := lib.DataBaseExec(DB, SQLCreateLog)
+		if code_ != 0 {
+			OutputLog(-1, "DataBase Prepare Fail")
+		}
+	}
 	SQLCreate := "CREATE TABLE IF NOT EXISTS `" + DB_TableName + "` (" +
 		func() string {
 			SQLBasic := ""

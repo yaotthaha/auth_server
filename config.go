@@ -21,6 +21,7 @@ type ConfigDataStruct struct {
 	Admin_CIDR_Access_Status bool     `json:"admin_cidr_access_status"`
 	Admin_Access_CIDR        []string `json:"admin_access_cidr"`
 	Admin_Password           string   `json:"admin_password"`
+	DBLog                    bool     `json:"dblog"`
 }
 
 func ConfigFileReadToStruct(configfilename string) (*ConfigDataStruct, int, error) {
@@ -155,5 +156,6 @@ func ConfigRead(configfile string) (int, error) {
 	if ConfigData.Admin_Password != "" {
 		Admin_Password = ConfigData.Admin_Password
 	}
+	DBLog = ConfigData.DBLog
 	return 0, nil
 }
