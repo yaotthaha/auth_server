@@ -8,5 +8,6 @@
   "admin_password": "adminadmin",
   "listen": "0.0.0.0",
   "port": 8082,
-  "admin_cidr_access_status": true
+  "admin_cidr_access_status": true,
+  "logfile": "auth_server.log"
 }

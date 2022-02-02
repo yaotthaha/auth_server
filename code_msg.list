@@ -19,6 +19,7 @@
 (-27) HTTP Server Start Fail
 (-50) UserInfo Error
 (-51) User Not Found
+(-52) LogFile Read Fail
 (-99) Others Error
 
 // HTTP User Code

@@ -18,6 +18,7 @@ func main() {
 	ConfigFilePath = ArgsArray["config"].(string)
 	DebugMode = ArgsArray["debug_mode"].(bool)
 	Admin_CIDR_Access_Status = ArgsArray["access"].(bool)
+	LogOutputFile = ArgsArray["logfile"].(string)
 	OutputLog(0, ApplicationName+" "+ApplicationVersion+" (Build From "+ApplicationAuthor+")")
 	OutputLog(0, "Start...")
 	Pre()
@@ -83,16 +84,19 @@ func ParamRead() map[string]interface{} {
 		insideConfig    string
 		insideDebugMode bool
 		insideAccessOff bool
+		insideLogFile   string
 	)
 	flag.StringVar(&insideConfig, "c", ConfigFileDefaultPath, "Config File Path")
 	flag.BoolVar(&insideDebugMode, "debug", false, "Debug Mode")
 	flag.BoolVar(&insideAccessOff, "accessoff", true, "Access Mode Turn Off")
+	flag.StringVar(&insideLogFile, "logfile", "", "Log Output File")
 	flag.Usage = usage
 	flag.Parse()
 	argsArray := make(map[string]interface{})
 	argsArray["config"] = insideConfig
 	argsArray["debug_mode"] = insideDebugMode
 	argsArray["access"] = insideAccessOff
+	argsArray["logfile"] = insideLogFile
 	return argsArray
 }
 
@@ -102,7 +106,8 @@ Usage: `+ApplicationName+` [-c ConfigFilePath] [-debug]
 Options:
    -c {string}  ConfigFilePath (default: `+ConfigFileDefaultPath+`)
    -debug       Debug Mode (default: false)
-   -accessoff      Access Mode Turn Off (default: false)
+   -accessoff   Access Mode Turn Off (default: false)
+   -logfile     Log Output File (default: none)
 `)
 }
 

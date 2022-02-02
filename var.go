@@ -2,8 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"github.com/go-redis/redis/v8"
 	"strings"
+
+	"github.com/go-redis/redis/v8"
 )
 
 var (
@@ -87,6 +88,7 @@ var (
 	ConfigFileDefaultPath string = "config.json"
 	ConfigFilePath        string = ConfigFileDefaultPath
 	DebugMode             bool   = false
+	LogOutputFile         string = ""
 )
 
 var DB_Struct []string = []string{

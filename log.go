@@ -7,6 +7,14 @@ import (
 )
 
 func OutputLog(LogLevel int, LogData string) {
+	if LogOutputFile != "" {
+		LogFile, err := os.OpenFile(LogOutputFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+		if err != nil {
+			log.Println("LogFile Read Fail: " + err.Error())
+			os.Exit(-1)
+		}
+		log.SetOutput(LogFile)
+	}
 	log.SetFlags(0)
 	var LogLevelTag string
 	switch LogLevel {
