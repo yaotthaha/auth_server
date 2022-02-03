@@ -8,7 +8,8 @@ import (
 )
 
 func OutputLog(LogLevel int, LogData string) {
-	if LogOutputFile != "" {
+	LogFileTag := false
+	if LogOutputFile != "" && LogFileTag == false {
 		_ = os.Remove(LogOutputFile)
 		LogFile, err := os.OpenFile(LogOutputFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
 		if err != nil {
@@ -16,6 +17,7 @@ func OutputLog(LogLevel int, LogData string) {
 			os.Exit(-1)
 		}
 		log.SetOutput(LogFile)
+		LogFileTag = true
 	}
 	log.SetFlags(0)
 	var LogLevelTag string
