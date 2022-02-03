@@ -9,6 +9,7 @@ import (
 
 func OutputLog(LogLevel int, LogData string) {
 	if LogOutputFile != "" {
+		_ = os.Remove(LogOutputFile)
 		LogFile, err := os.OpenFile(LogOutputFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
 		if err != nil {
 			log.Println("LogFile Read Fail: " + err.Error())
