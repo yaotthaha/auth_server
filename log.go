@@ -45,22 +45,21 @@ func OutputLog(LogLevel int, LogData string) {
 	}
 }
 
-func DataBaseLog(DB *sql.DB, InputMsg ...string) {
+func DataBaseLog(DB *sql.DB, Operate, Message string) {
+	if !DBLog {
+		return
+	}
 	SQL1 := "INSERT INTO `" + DB_LogTableName + "`("
 	SQL2 := ") VALUES ("
 	SQL3 := ")"
-	i := 0
-	for _, v := range DB_Log_Struct {
-		switch v {
-		case "time":
-			SQL1 += "`" + v + "`, "
-			SQL2 += "'" + "[" + lib.GenDate_String() + "]" + "', "
-		default:
-			SQL1 += "`" + v + "`"
-			SQL2 += "'" + InputMsg[i] + "', "
-			i++
-		}
-	}
+	SQL1 += "`time`, "
+	SQL2 += "'" + "[" + lib.GenDate_String() + "]" + "', "
+	//
+	SQL1 += "`operate`"
+	SQL2 += "'" + Operate + "', "
+	SQL1 += "`message`"
+	SQL2 += "'" + Message + "', "
+	//
 	SQL1 = SQL1[0 : len(SQL1)-2]
 	SQL2 = SQL2[0 : len(SQL2)-2]
 	SQL := SQL1 + SQL2 + SQL3

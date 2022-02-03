@@ -168,24 +168,32 @@ func AuthUserAuth(ParamMap map[string]string, ConnectionTag string) string {
 	}
 	UserInfoRespon, code, err = DataBaseSearchUserInfo(DB, DecryptInfo["UserIDInput"])
 	if code != 0 {
+		DataBaseLog(DB, "用户登录", "状态：失败 | 额外信息：登入的用户ID{"+DecryptInfo["UserIDInput"]+"}未找到")
 		OutputLog(-2, lib.JoinString("[User Auth] [", ConnectionTag, "] DataBase Search Fail: ", err.Error()))
 		return HTTPJSONRespon("013", "Password Invalid")
 	}
 	if len(UserInfoRespon) <= 0 {
+		DataBaseLog(DB, "用户登录", "状态：失败 | 额外信息：用户ID{"+DecryptInfo["UserIDInput"]+"}未找到")
 		OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] User Not Found"))
 		return HTTPJSONRespon("014", "User Not Found")
 	}
 	if UserInfoRespon["status"] != "true" {
+		DataBaseLog(DB, "用户登录", "状态：失败 | 额外信息：用户ID{"+UserInfoRespon["user_id"]+"}已禁用")
 		OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] User Disable"))
 		return HTTPJSONRespon("016", "User Disable")
 	}
 	if UserInfoRespon["expire_time"] != "0" {
 		if lib.StringNumCompare(UserInfoRespon["expire_time"], lib.GetTimestamp_S_String()) < 0 {
+			DataBaseLog(DB, "用户登录", "状态：失败 | 额外信息：用户ID{"+UserInfoRespon["user_id"]+"}已过期 | 过期时间：["+lib.TimestampToDate(func(TimestampString string) int64 {
+				t, _ := strconv.ParseInt(TimestampString, 10, 64)
+				return t
+			}(UserInfoRespon["expire_time"]))+"]")
 			OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] User Expired"))
 			return HTTPJSONRespon("015", "User Expired")
 		}
 	}
 	if DecryptInfo["PasswordSecretInput"] != UserInfoRespon["password_secret"] {
+		DataBaseLog(DB, "用户登录", "状态：失败 | 额外信息：用户ID{"+UserInfoRespon["user_id"]+"} 密码错误")
 		OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] Password Invalid"))
 		return HTTPJSONRespon("013", "Password Invalid")
 	}
@@ -218,6 +226,7 @@ func AuthUserAuth(ParamMap map[string]string, ConnectionTag string) string {
 			return HTTPJSONRespon("019", "User Access Denied")
 		}
 	}
+	DataBaseLog(DB, "用户登录", "状态：成功 | 额外信息：用户ID{"+UserInfoRespon["user_id"]+"} Token: "+Token)
 	ReturnMap["token"] = Token
 	OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] Auth Success, Username [", UserInfoRespon["username"], "] Get Token: {", Token, "}"))
 	return HTTPJSONRespon("000", ReturnMap)
@@ -273,13 +282,17 @@ func AuthAppAuth(ParamMap map[string]string, ConnectionTag string) string {
 		OutputLog(-2, lib.JoinString("[App Auth] [", ConnectionTag, "] String to Map Fail"))
 		return HTTPJSONRespon("098", "API Call Fail")
 	}
-
 	if UserInfo["status"] != "true" {
+		DataBaseLog(DB, "APP验证", "状态：失败 | 额外信息：用户ID{"+UserInfo["user_id"]+"}已禁用")
 		OutputLog(0, lib.JoinString("[App Auth] [", ConnectionTag, "] User Disable"))
 		return HTTPJSONRespon("016", "User Disable")
 	}
 	if UserInfo["expire_time"] != "0" {
 		if lib.StringNumCompare(UserInfo["expire_time"], lib.GetTimestamp_S_String()) < 0 {
+			DataBaseLog(DB, "APP验证", "状态：失败 | 额外信息：用户ID{"+UserInfo["user_id"]+"}已过期 | 过期时间：["+lib.TimestampToDate(func(TimestampString string) int64 {
+				t, _ := strconv.ParseInt(TimestampString, 10, 64)
+				return t
+			}(UserInfo["expire_time"]))+"]")
 			OutputLog(0, lib.JoinString("[App Auth] [", ConnectionTag, "] User Expired"))
 			return HTTPJSONRespon("015", "User Expired")
 		}
@@ -295,9 +308,11 @@ func AuthAppAuth(ParamMap map[string]string, ConnectionTag string) string {
 		ReturnMap["app_access"] = true
 		ReturnMap["show_username"] = UserInfo["show_username"]
 	} else {
+		DataBaseLog(DB, "APP验证", "状态：失败 | 额外信息：用户ID{"+UserInfo["user_id"]+"}没有APP{"+ParamMap["app_name"]+"}的权限")
 		OutputLog(0, lib.JoinString("[App Auth] [", ConnectionTag, "] User Access Denied, AppName: {", ParamMap["app_name"], "}"))
 		return HTTPJSONRespon("019", "User Access Denied")
 	}
+	DataBaseLog(DB, "APP验证", "状态：成功 | 额外信息：用户ID{"+UserInfo["user_id"]+"} APP: "+ParamMap["app_name"])
 	OutputLog(0, lib.JoinString("[App Auth] [", ConnectionTag, "] Auth Success, Username [", UserInfo["username"], "] Auth Token: {", ParamMap["token"], "}, AppName: {", ParamMap["app_name"], "}"))
 	return HTTPJSONRespon("000", ReturnMap)
 }

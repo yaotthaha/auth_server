@@ -4,13 +4,14 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"github.com/gofrs/uuid"
 	"math/big"
 	"math/rand"
 	"net"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/gofrs/uuid"
 )
 
 func IsFileExist(path string) bool {
@@ -116,5 +117,5 @@ func GenUUID() string {
 }
 
 func TimestampToDate(timestamp int64) string {
-	return fmt.Sprintf("%v", time.Unix(timestamp, 0))
+	return fmt.Sprintf("%v", time.Unix(timestamp, 0).Format("2006-01-02 15:04:05"))
 }
