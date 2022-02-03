@@ -85,6 +85,15 @@ func AdminRoute(ParamMap map[string]string, ConnectionTag string) string {
 			delete(ParamMap, "admin_token")
 		}
 		return AdminUserList(ConnectionTag)
+	case "operate_list":
+		if !DBLog {
+			OutputLog(0, "[HTTP Server] [Admin] ["+ConnectionTag+"] Method Not Found")
+			return HTTPJSONRespon("111", "Param `method` Invalid")
+		}
+		if ResponHTTP, CheckAccess := AdminAccessCheck(ParamMap, ConnectionTag); !CheckAccess {
+			return ResponHTTP
+		}
+		return AdminOperateList(ConnectionTag)
 	case "auth_close":
 		if ResponHTTP, CheckAccess := AdminAccessCheck(ParamMap, ConnectionTag); !CheckAccess {
 			return ResponHTTP
@@ -569,6 +578,16 @@ func AdminUserList(ConnectionTag string) string {
 	Result, code, err := DataBaseUserList(DB)
 	if code != 0 {
 		OutputLog(-2, lib.JoinString("[Admin UserList] [", ConnectionTag, "] Error Database Query Fail: ", err.Error()))
+		return HTTPJSONRespon("198", "API Call Fail")
+	}
+	return HTTPJSONRespon("100", Result)
+}
+
+func AdminOperateList(ConnectionTag string) string {
+	SQL := "SELECT * FROM `" + DB_LogTableName + "`"
+	Result, code, err := lib.DataBaseQuery(DB, SQL)
+	if code != 0 {
+		OutputLog(-2, lib.JoinString("[Admin OperateList] [", ConnectionTag, "] Error Database Query Fail: ", err.Error()))
 		return HTTPJSONRespon("198", "API Call Fail")
 	}
 	return HTTPJSONRespon("100", Result)
