@@ -7,8 +7,9 @@ import (
 	"os"
 )
 
+var LogFileTag bool = false
+
 func OutputLog(LogLevel int, LogData string) {
-	LogFileTag := false
 	if LogOutputFile != "" && LogFileTag == false {
 		_ = os.Remove(LogOutputFile)
 		LogFile, err := os.OpenFile(LogOutputFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
