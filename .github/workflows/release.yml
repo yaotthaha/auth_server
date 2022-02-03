@@ -25,8 +25,9 @@ jobs:
         mkdir output
         chmod 0777 output
         go build -o $GITHUB_WORKSPACE/output/auth_server_${{ env.GOOS }}_${{ env.GOARCH }}
-        ls -la $GITHUB_WORKSPACE
-        ls -la $GITHUB_WORKSPACE/output
+        cd $GITHUB_WORKSPACE/output
+        sha256sum auth_server_${{ env.GOOS }}_${{ env.GOARCH }} > auth_server_${{ env.GOOS }}_${{ env.GOARCH }}.sha256sum
+        cp $GITHUB_WORKSPACE/config.json ./
 
     - name: Release Ready
       run: |
