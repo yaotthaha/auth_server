@@ -1,8 +1,8 @@
 {
   "db_conn": "tcp://10.254.0.6:3306",
-  "db_name": "auth_user_data",
-  "db_user": "program_account",
-  "db_pass": "9NRrbKr0iU93uQcW",
+  "db_name": "auth_user_data_test",
+  "db_user": "pro_account_test",
+  "db_pass": "h3JNmd8tnUVsnzMT",
   "redis_conn": "tcp://127.0.0.1:6379",
   "redis_pass": "",
   "admin_password": "adminadmin",
