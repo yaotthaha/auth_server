@@ -85,7 +85,7 @@ var (
 
 var (
 	ApplicationName       string = "AuthServer"
-	ApplicationVersion    string = "v2.3.0"
+	ApplicationVersion    string = "v2.3.1"
 	ApplicationAuthor     string = "Yaott"
 	ConfigFileDefaultPath string = "config.json"
 	ConfigFilePath        string = ConfigFileDefaultPath
