@@ -22,7 +22,11 @@ jobs:
     - name: Build
       run: |
         cd $GITHUB_WORKSPACE
-        go build -o $GITHUB_WORKSPACE/auth_server_${{ env.GOOS }}_${{ env.GOARCH }}
+        mkdir output
+        chmod 0777 output
+        go build -o $GITHUB_WORKSPACE/output/auth_server_${{ env.GOOS }}_${{ env.GOARCH }}
+        ls -la $GITHUB_WORKSPACE
+        ls -la $GITHUB_WORKSPACE/output
 
     - name: Release Ready
       run: |
@@ -30,14 +34,14 @@ jobs:
         version=$(cat var.go | grep ApplicationVersion | awk '{print $4}' | awk -F '"' '{print $2}')
         echo "VERSION=$version" >> $GITHUB_ENV
 
-    - name: Release
-      uses: softprops/action-gh-release@v0.1.6
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        name: ${{ env.VERSION }}
-        tag_name: ${{ env.VERSION }}
-        draft: false
-        prerelease: false
-        files: |
-          $GITHUB_WORKSPACE/auth_server_*
+    - name: Git push assets to "release" branch
+      run: |
+        cd $GITHUB_WORKSPACE/output || exit 1
+        git init
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "95022881+github-actions[bot]@users.noreply.github.com"
+        git checkout -b release
+        git add .
+        git commit -m "Release ${{ env.VERSION }}"
+        git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+        git push -f -u origin release
