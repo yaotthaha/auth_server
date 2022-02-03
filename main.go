@@ -15,6 +15,10 @@ import (
 func main() {
 	SetupCloseHandler()
 	ArgsArray := ParamRead()
+	if ArgsArray["version"].(bool) {
+		fmt.Println(ApplicationName + " " + ApplicationVersion + " (Build From " + ApplicationAuthor + ")")
+		return
+	}
 	ConfigFilePath = ArgsArray["config"].(string)
 	DebugMode = ArgsArray["debug_mode"].(bool)
 	Admin_CIDR_Access_Status = ArgsArray["access"].(bool)
@@ -101,11 +105,13 @@ func ParamRead() map[string]interface{} {
 		insideDebugMode bool
 		insideAccessOff bool
 		insideLogFile   string
+		insideVersion   bool
 	)
 	flag.StringVar(&insideConfig, "c", ConfigFileDefaultPath, "Config File Path")
 	flag.BoolVar(&insideDebugMode, "debug", false, "Debug Mode")
 	flag.BoolVar(&insideAccessOff, "accessoff", true, "Access Mode Turn Off")
 	flag.StringVar(&insideLogFile, "logfile", "", "Log Output File")
+	flag.BoolVar(&insideVersion, "v", false, "Show Version")
 	flag.Usage = usage
 	flag.Parse()
 	argsArray := make(map[string]interface{})
@@ -113,6 +119,7 @@ func ParamRead() map[string]interface{} {
 	argsArray["debug_mode"] = insideDebugMode
 	argsArray["access"] = insideAccessOff
 	argsArray["logfile"] = insideLogFile
+	argsArray["version"] = insideVersion
 	return argsArray
 }
 
