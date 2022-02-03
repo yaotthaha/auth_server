@@ -55,9 +55,9 @@ func DataBaseLog(DB *sql.DB, Operate, Message string) {
 	SQL1 += "`time`, "
 	SQL2 += "'" + "[" + lib.GenDate_String() + "]" + "', "
 	//
-	SQL1 += "`operate`"
+	SQL1 += "`operate`, "
 	SQL2 += "'" + Operate + "', "
-	SQL1 += "`message`"
+	SQL1 += "`message`, "
 	SQL2 += "'" + Message + "', "
 	//
 	SQL1 = SQL1[0 : len(SQL1)-2]
