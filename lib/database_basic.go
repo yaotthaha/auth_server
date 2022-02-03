@@ -3,9 +3,10 @@ package lib
 import (
 	"database/sql"
 	"errors"
+	"strings"
+
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
-	"strings"
 )
 
 func DataBaseConnect(ConfigMap map[string]string) (*sql.DB, int, error) {
@@ -28,6 +29,7 @@ func DataBaseConnect(ConfigMap map[string]string) (*sql.DB, int, error) {
 		case "unix":
 			connect_url = ConfigMap["user"] + ":" + ConfigMap["pass"] + "@unix(" + DataBaseConnArray[1] + ")/" + ConfigMap["db_name"]
 		}
+		connect_url += "?timeout=3s"
 		DB, err := sql.Open("mysql", connect_url)
 		DB.SetConnMaxLifetime(16)
 		DB.SetMaxIdleConns(8)

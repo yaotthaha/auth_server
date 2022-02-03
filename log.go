@@ -43,6 +43,7 @@ func OutputLog(LogLevel int, LogData string) {
 	if LogLevel == -1 {
 		log.Println(LogData)
 		CloseClean()
+		OutputLog(0, "Good Bye!!")
 		os.Exit(-1)
 	} else {
 		log.Println(LogData)

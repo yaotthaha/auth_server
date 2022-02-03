@@ -3,9 +3,10 @@ package lib
 import (
 	"context"
 	"errors"
-	"github.com/go-redis/redis/v8"
 	"strings"
 	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
 func RedisConnect(ConfigMap map[string]string) (*redis.Client, int, error) {

@@ -154,13 +154,17 @@ func SetupCloseHandler() {
 }
 
 func CloseClean() {
-	_, _ = lib.DataBaseCloseConn(DB)
-	func(RedisClient *redis.Client) {
-		Keys, _, _ := lib.RedisKeys(RedisClient, Cache_Prefix_Tag+"*")
-		for _, v := range Keys {
-			_, _ = lib.RedisDel(RedisClient, v)
-		}
-		return
-	}(RedisClient)
-	_, _ = lib.RedisConnClose(RedisClient)
+	if DB != nil {
+		_, _ = lib.DataBaseCloseConn(DB)
+	}
+	if RedisClient != nil {
+		func(RedisClient *redis.Client) {
+			Keys, _, _ := lib.RedisKeys(RedisClient, Cache_Prefix_Tag+"*")
+			for _, v := range Keys {
+				_, _ = lib.RedisDel(RedisClient, v)
+			}
+			return
+		}(RedisClient)
+		_, _ = lib.RedisConnClose(RedisClient)
+	}
 }
