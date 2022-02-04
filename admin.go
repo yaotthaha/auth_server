@@ -250,6 +250,11 @@ func AdminAccessCheck(ParamMap map[string]string, ConnectionTag string) (string,
 		}
 	}
 	if TokenCache == ParamMap["admin_token"] {
+		code, err = lib.RedisExpire(RedisClient, Cache_Admin_Token_Tag, int64(Cache_Admin_Token_Expire_Time))
+		if code != 0 {
+			OutputLog(0, lib.JoinString("[Admin Access] [", ConnectionTag, "] Error Redis Expire Fail: ", err.Error()))
+			return HTTPJSONRespon("198", "API Call Fail"), false
+		}
 		return "nil", true
 	} else {
 		OutputLog(0, lib.JoinString("[Admin Access] [", ConnectionTag, "] Admin Token Auth Fail"))
