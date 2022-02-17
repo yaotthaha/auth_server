@@ -99,7 +99,7 @@ func AuthUserPrepare(ConnectionTag string) string {
 	OutputLog(2, lib.JoinString("[User Prepare] [", ConnectionTag, "] Save RSA PriKey To Redis Server"))
 	ReturnMap := make(map[string]string)
 	ReturnMap["session_id"] = NewSessionID
-	ReturnMap["timestamp"] = lib.GetTimestamp_S_String()
+	//ReturnMap["timestamp"] = lib.GetTimestamp_S_String()
 	ReturnMap["public_key"] = string(PubKey)
 	return HTTPJSONRespon("000", ReturnMap)
 }
@@ -151,17 +151,22 @@ func AuthUserAuth(ParamMap map[string]string, ConnectionTag string) string {
 		OutputLog(-2, lib.JoinString("[User Auth] [", ConnectionTag, "] RSA Decrypt Fail: ", err.Error()))
 		return HTTPJSONRespon("013", "Password Invalid")
 	}
-	TimeStampNowString := lib.GetTimestamp_S_String()
-	for i := 0; i < int(Password_Check_Time); i++ {
-		TimeStampTemp := lib.BigIntReduce(TimeStampNowString, strconv.Itoa(i))
-		SecretInfoArray := strings.Split(string(RealSecretInfoByte), "_TIMESTAMP_")
-		if SecretInfoArray[2] != TimeStampTemp {
-			continue
+	/*
+		TimeStampNowString := lib.GetTimestamp_S_String()
+		for i := 0; i < int(Password_Check_Time); i++ {
+			TimeStampTemp := lib.BigIntReduce(TimeStampNowString, strconv.Itoa(i))
+			SecretInfoArray := strings.Split(string(RealSecretInfoByte), "_TIMESTAMP_")
+			if SecretInfoArray[2] != TimeStampTemp {
+				continue
+			}
+			DecryptInfo["UserIDInput"] = SecretInfoArray[1]
+			DecryptInfo["PasswordSecretInput"] = SecretInfoArray[3]
+			break
 		}
-		DecryptInfo["UserIDInput"] = SecretInfoArray[1]
-		DecryptInfo["PasswordSecretInput"] = SecretInfoArray[3]
-		break
-	}
+	*/
+	SecretInfoArray := strings.Split(string(RealSecretInfoByte), "_INTERVAL_")
+	DecryptInfo["UserIDInput"] = SecretInfoArray[1]
+	DecryptInfo["PasswordSecretInput"] = SecretInfoArray[2]
 	if len(DecryptInfo) <= 0 {
 		OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] SecretInfo Not Found"))
 		return HTTPJSONRespon("017", "Auth Timeout")
