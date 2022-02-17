@@ -31,7 +31,7 @@
 (014) User Not Found
 (015) User Expired
 (016) User Disable
-(017) Auth Timeout
+#(017) Auth Timeout
 (018) Token Invalid
 (019) User Access Denied
 (098) API Call Fail

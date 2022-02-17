@@ -119,7 +119,6 @@ func AuthUserAuth(ParamMap map[string]string, ConnectionTag string) string {
 	(014) User Not Found
 	(015) User Expired
 	(016) User Disable
-	(017) Auth Timeout
 	(019) User Access Denied
 	(098) API Call Fail
 	(099) Others Error
@@ -168,8 +167,8 @@ func AuthUserAuth(ParamMap map[string]string, ConnectionTag string) string {
 	DecryptInfo["UserIDInput"] = SecretInfoArray[1]
 	DecryptInfo["PasswordSecretInput"] = SecretInfoArray[2]
 	if len(DecryptInfo) <= 0 {
-		OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] SecretInfo Not Found"))
-		return HTTPJSONRespon("017", "Auth Timeout")
+		OutputLog(0, lib.JoinString("[User Auth] [", ConnectionTag, "] SecretInfo Invalid"))
+		return HTTPJSONRespon("013", "Password Invalid")
 	}
 	UserInfoRespon, code, err = DataBaseSearchUserInfo(DB, DecryptInfo["UserIDInput"])
 	if code != 0 {
